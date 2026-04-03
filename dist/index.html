@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>마크업 품질 체크리스트</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="css/pages/checklist.css">
+</head>
+<body>
+  <div class="checklist-wrap">
+    <!-- Header -->
+    <header class="checklist-header">
+      <h1 class="checklist-header__title">마크업 품질 체크리스트</h1>
+      <p class="checklist-header__desc">웹 접근성, 크로스브라우징, 성능, 코드 품질을 점검하세요.</p>
+    </header>
+
+    <!-- Progress -->
+    <div class="progress-area">
+      <div class="progress-area__bar-wrap">
+        <div class="progress-area__bar">
+          <div class="progress-area__bar-fill"></div>
+        </div>
+      </div>
+      <div class="progress-area__stats">
+        <span><strong id="checkedCount">0</strong> / <span id="totalCount">0</span> 완료</span>
+        <span><strong id="percentText">0%</strong></span>
+      </div>
+      <button type="button" class="progress-area__reset">초기화</button>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button type="button" class="filter-tabs__btn is-active" data-filter="all">전체</button>
+      <button type="button" class="filter-tabs__btn" data-filter="structure">구조</button>
+      <button type="button" class="filter-tabs__btn" data-filter="accessibility">접근성</button>
+      <button type="button" class="filter-tabs__btn" data-filter="seo">SEO</button>
+      <button type="button" class="filter-tabs__btn" data-filter="performance">성능</button>
+      <button type="button" class="filter-tabs__btn" data-filter="crossbrowsing">크로스브라우징</button>
+      <button type="button" class="filter-tabs__btn" data-filter="responsive">반응형</button>
+      <button type="button" class="filter-tabs__btn" data-filter="codequality">코드 품질</button>
+    </div>
+
+    <!-- ========== 1. HTML 구조 ========== -->
+    <section class="category-section is-open" data-category="structure">
+      <div class="category-section__header">
+        <div class="category-section__header-left">
+          <div class="category-section__icon" style="background:#E3F2FD;color:#1565C0;">🏗</div>
+          <h2 class="category-section__title">HTML 구조 <span class="category-section__count">(0/8)</span></h2>
+        </div>
+        <div class="category-section__toggle">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+        </div>
+      </div>
+      <div class="category-section__body">
+        <ul class="category-section__list">
+          <li class="check-item" data-id="s01">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">DOCTYPE 선언이 올바른가?</span>
+              <p class="check-item__desc">&lt;!DOCTYPE html&gt; 선언이 문서 최상단에 위치해야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="s02">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">html lang 속성이 설정되었는가?</span>
+              <p class="check-item__desc">&lt;html lang="ko"&gt; 등 문서 언어가 명시되어야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="s03">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">meta charset이 UTF-8로 설정되었는가?</span>
+              <p class="check-item__desc">&lt;meta charset="UTF-8"&gt;이 head 내 최상단에 위치해야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="s04">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">viewport meta 태그가 설정되었는가?</span>
+              <p class="check-item__desc">width=device-width, initial-scale=1.0이 포함되어야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="s05">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">시맨틱 태그를 적절히 사용하였는가?</span>
+              <p class="check-item__desc">header, nav, main, section, article, aside, footer 등 의미에 맞는 태그를 사용합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="s06">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">헤딩 태그(h1~h6)가 올바른 계층 구조인가?</span>
+              <p class="check-item__desc">h1은 페이지당 1개, 헤딩 레벨을 건너뛰지 않아야 합니다. (h1→h3 금지)</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="s07">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">W3C Validator 검사를 통과하는가?</span>
+              <p class="check-item__desc">HTML 유효성 검사(validator.w3.org)에서 에러가 없어야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="s08">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">불필요한 div/span 남용이 없는가?</span>
+              <p class="check-item__desc">의미 없는 래퍼 요소를 최소화하고 시맨틱 태그로 대체합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== 2. 웹 접근성 ========== -->
+    <section class="category-section" data-category="accessibility">
+      <div class="category-section__header">
+        <div class="category-section__header-left">
+          <div class="category-section__icon" style="background:#E8F5E9;color:#2E7D32;">♿</div>
+          <h2 class="category-section__title">웹 접근성 <span class="category-section__count">(0/12)</span></h2>
+        </div>
+        <div class="category-section__toggle">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+        </div>
+      </div>
+      <div class="category-section__body">
+        <ul class="category-section__list">
+          <li class="check-item" data-id="a01">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">모든 img에 alt 속성이 있는가?</span>
+              <p class="check-item__desc">장식 이미지는 alt=""로, 의미 있는 이미지는 적절한 대체 텍스트를 제공합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="a02">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">건너뛰기 링크(Skip Navigation)가 있는가?</span>
+              <p class="check-item__desc">페이지 최상단에 본문 바로가기 링크를 제공해야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="a03">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">키보드만으로 모든 기능을 사용할 수 있는가?</span>
+              <p class="check-item__desc">Tab, Enter, Space, Esc 키로 모든 인터랙션이 가능해야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="a04">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">포커스 표시(focus indicator)가 보이는가?</span>
+              <p class="check-item__desc">outline을 제거한 경우 대체 포커스 스타일을 제공해야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="a05">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">폼 요소에 label이 연결되었는가?</span>
+              <p class="check-item__desc">모든 input, select, textarea에 for/id 또는 aria-label로 레이블을 연결합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="a06">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">색상 대비(Contrast Ratio)가 충분한가?</span>
+              <p class="check-item__desc">텍스트와 배경 간 대비율이 WCAG AA 기준 4.5:1 이상이어야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="a07">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">ARIA 속성이 올바르게 사용되었는가?</span>
+              <p class="check-item__desc">role, aria-label, aria-hidden, aria-expanded 등이 적절히 적용되었는지 확인합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="a08">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">테이블에 caption과 th scope가 있는가?</span>
+              <p class="check-item__desc">데이터 테이블에 caption, summary, th scope="col/row"을 제공합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="a09">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">링크 텍스트가 명확한가?</span>
+              <p class="check-item__desc">"여기를 클릭", "더보기" 대신 목적지를 명확히 알 수 있는 텍스트를 사용합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="a10">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">새 창 링크에 안내가 있는가?</span>
+              <p class="check-item__desc">target="_blank" 사용 시 title 또는 blind 텍스트로 새 창 열림을 안내합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="a11">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">자동 재생 콘텐츠에 정지 수단이 있는가?</span>
+              <p class="check-item__desc">자동 재생되는 슬라이드, 동영상 등에 일시정지 버튼을 제공합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="a12">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">WAI-ARIA 랜드마크가 적절히 사용되었는가?</span>
+              <p class="check-item__desc">banner, navigation, main, contentinfo 등 랜드마크 역할을 부여합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--low">선택</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== 3. SEO ========== -->
+    <section class="category-section" data-category="seo">
+      <div class="category-section__header">
+        <div class="category-section__header-left">
+          <div class="category-section__icon" style="background:#FFF3E0;color:#E65100;">🔍</div>
+          <h2 class="category-section__title">SEO <span class="category-section__count">(0/8)</span></h2>
+        </div>
+        <div class="category-section__toggle">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+        </div>
+      </div>
+      <div class="category-section__body">
+        <ul class="category-section__list">
+          <li class="check-item" data-id="e01">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">title 태그가 페이지별로 고유한가?</span>
+              <p class="check-item__desc">각 페이지마다 내용을 반영한 고유한 title을 작성합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="e02">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">meta description이 작성되었는가?</span>
+              <p class="check-item__desc">페이지 내용을 요약하는 150~160자 이내의 설명을 제공합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="e03">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">OG(Open Graph) 태그가 설정되었는가?</span>
+              <p class="check-item__desc">og:title, og:description, og:image 등 소셜 공유 메타 태그를 제공합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="e04">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">canonical URL이 설정되었는가?</span>
+              <p class="check-item__desc">&lt;link rel="canonical"&gt;로 대표 URL을 지정하여 중복 콘텐츠를 방지합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="e05">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">이미지에 의미 있는 파일명을 사용하는가?</span>
+              <p class="check-item__desc">img001.jpg 대신 product-detail-main.jpg처럼 내용을 설명하는 파일명을 사용합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--low">선택</span>
+          </li>
+          <li class="check-item" data-id="e06">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">robots meta 또는 robots.txt가 적절한가?</span>
+              <p class="check-item__desc">검색엔진 크롤링이 필요한 페이지는 차단되지 않았는지 확인합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="e07">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">구조화된 데이터(Schema.org)를 사용하는가?</span>
+              <p class="check-item__desc">JSON-LD 형식으로 구조화된 데이터를 추가하여 리치 스니펫을 지원합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--low">선택</span>
+          </li>
+          <li class="check-item" data-id="e08">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">favicon이 설정되었는가?</span>
+              <p class="check-item__desc">브라우저 탭, 북마크에 표시되는 파비콘을 제공합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== 4. 성능 ========== -->
+    <section class="category-section" data-category="performance">
+      <div class="category-section__header">
+        <div class="category-section__header-left">
+          <div class="category-section__icon" style="background:#FCE4EC;color:#C62828;">⚡</div>
+          <h2 class="category-section__title">성능 최적화 <span class="category-section__count">(0/8)</span></h2>
+        </div>
+        <div class="category-section__toggle">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+        </div>
+      </div>
+      <div class="category-section__body">
+        <ul class="category-section__list">
+          <li class="check-item" data-id="p01">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">이미지 최적화가 되었는가?</span>
+              <p class="check-item__desc">WebP/AVIF 포맷 사용, 적절한 크기로 리사이즈, 압축을 적용합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="p02">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">이미지에 width/height 속성이 있는가?</span>
+              <p class="check-item__desc">CLS(레이아웃 이동) 방지를 위해 이미지 크기를 명시합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="p03">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">지연 로딩(lazy loading)이 적용되었는가?</span>
+              <p class="check-item__desc">뷰포트 밖 이미지에 loading="lazy"를 적용합니다. (첫 화면 이미지 제외)</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="p04">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">CSS가 head에, JS가 body 하단에 위치하는가?</span>
+              <p class="check-item__desc">렌더 차단을 최소화하기 위해 CSS는 상단, JS는 하단 또는 defer/async를 사용합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="p05">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">CSS/JS 파일이 압축(minify)되었는가?</span>
+              <p class="check-item__desc">프로덕션 환경에서 CSS/JS를 압축하여 파일 크기를 줄입니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="p06">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">웹폰트가 최적화되었는가?</span>
+              <p class="check-item__desc">font-display: swap 적용, 서브셋 사용, preload로 우선 로딩합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="p07">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">불필요한 리소스 요청이 없는가?</span>
+              <p class="check-item__desc">사용하지 않는 CSS/JS, 외부 라이브러리를 제거합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="p08">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">LCP(Largest Contentful Paint)가 2.5초 이내인가?</span>
+              <p class="check-item__desc">Lighthouse 또는 PageSpeed Insights로 Core Web Vitals를 측정합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== 5. 크로스브라우징 ========== -->
+    <section class="category-section" data-category="crossbrowsing">
+      <div class="category-section__header">
+        <div class="category-section__header-left">
+          <div class="category-section__icon" style="background:#F3E5F5;color:#6A1B9A;">🌐</div>
+          <h2 class="category-section__title">크로스브라우징 <span class="category-section__count">(0/7)</span></h2>
+        </div>
+        <div class="category-section__toggle">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+        </div>
+      </div>
+      <div class="category-section__body">
+        <ul class="category-section__list">
+          <li class="check-item" data-id="c01">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">Chrome 최신 버전에서 정상 동작하는가?</span>
+              <p class="check-item__desc">레이아웃, 인터랙션, 폰트 렌더링이 의도대로 표시되는지 확인합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="c02">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">Safari 최신 버전에서 정상 동작하는가?</span>
+              <p class="check-item__desc">iOS/macOS Safari에서 Flexbox, Grid, 스크롤 동작 등을 점검합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="c03">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">Firefox 최신 버전에서 정상 동작하는가?</span>
+              <p class="check-item__desc">Firefox 고유의 렌더링 차이(스크롤바, 폼 요소 등)를 확인합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="c04">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">Edge 최신 버전에서 정상 동작하는가?</span>
+              <p class="check-item__desc">Microsoft Edge에서 레이아웃과 기능이 정상 동작하는지 확인합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="c05">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">Samsung Internet에서 정상 동작하는가?</span>
+              <p class="check-item__desc">삼성 모바일 브라우저에서 레이아웃과 터치 이벤트를 점검합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="c06">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">벤더 프리픽스(-webkit- 등)가 필요한 속성에 적용되었는가?</span>
+              <p class="check-item__desc">Autoprefixer 등을 활용하여 호환성을 확보합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="c07">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">CSS/JS 최신 문법의 호환성을 확인했는가?</span>
+              <p class="check-item__desc">Can I Use에서 사용 문법의 브라우저 지원 범위를 확인합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== 6. 반응형 ========== -->
+    <section class="category-section" data-category="responsive">
+      <div class="category-section__header">
+        <div class="category-section__header-left">
+          <div class="category-section__icon" style="background:#E0F7FA;color:#00695C;">📱</div>
+          <h2 class="category-section__title">반응형 웹 <span class="category-section__count">(0/7)</span></h2>
+        </div>
+        <div class="category-section__toggle">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+        </div>
+      </div>
+      <div class="category-section__body">
+        <ul class="category-section__list">
+          <li class="check-item" data-id="r01">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">320px~1920px 범위에서 레이아웃이 깨지지 않는가?</span>
+              <p class="check-item__desc">최소 320px부터 최대 1920px까지 브라우저 크기를 조절하며 확인합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="r02">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">가로 스크롤이 발생하지 않는가?</span>
+              <p class="check-item__desc">모든 해상도에서 의도치 않은 가로 스크롤이 없어야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="r03">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">터치 영역이 충분한 크기인가? (44×44px 이상)</span>
+              <p class="check-item__desc">모바일에서 버튼, 링크 등의 터치 영역이 최소 44×44px 이상이어야 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="r04">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">미디어 쿼리 분기점(breakpoint)이 일관적인가?</span>
+              <p class="check-item__desc">프로젝트 내에서 통일된 breakpoint(320/828/1024/1366/1920px)를 사용합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="r05">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">폰트 크기가 반응형으로 적절히 조정되는가?</span>
+              <p class="check-item__desc">모바일에서 텍스트가 너무 크거나 작지 않은지 확인합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="r06">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">가로/세로 모드(orientation) 전환이 정상인가?</span>
+              <p class="check-item__desc">모바일 기기에서 화면 회전 시 레이아웃이 정상적으로 재배치되는지 확인합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="r07">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">반응형 이미지(srcset, picture)를 사용하는가?</span>
+              <p class="check-item__desc">해상도별 적절한 크기의 이미지를 제공하여 불필요한 데이터 전송을 줄입니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--low">선택</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== 7. 코드 품질 ========== -->
+    <section class="category-section" data-category="codequality">
+      <div class="category-section__header">
+        <div class="category-section__header-left">
+          <div class="category-section__icon" style="background:#EFEBE9;color:#4E342E;">📝</div>
+          <h2 class="category-section__title">코드 품질 <span class="category-section__count">(0/10)</span></h2>
+        </div>
+        <div class="category-section__toggle">
+          <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+        </div>
+      </div>
+      <div class="category-section__body">
+        <ul class="category-section__list">
+          <li class="check-item" data-id="q01">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">들여쓰기(indentation)가 일관적인가?</span>
+              <p class="check-item__desc">프로젝트 내 2칸 또는 4칸 스페이스를 통일하여 사용합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="q02">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">BEM 또는 일관된 클래스 네이밍을 사용하는가?</span>
+              <p class="check-item__desc">block__element--modifier 규칙 등 팀 컨벤션에 맞는 네이밍을 적용합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="q03">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">인라인 스타일을 사용하지 않는가?</span>
+              <p class="check-item__desc">style 속성 대신 외부 CSS 파일에 스타일을 정의합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--high">필수</span>
+          </li>
+          <li class="check-item" data-id="q04">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">CSS 선택자 깊이가 3단계 이내인가?</span>
+              <p class="check-item__desc">과도한 선택자 중첩(.a .b .c .d .e)을 피하고 명확한 클래스를 사용합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="q05">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">!important 사용을 최소화하였는가?</span>
+              <p class="check-item__desc">스타일 우선순위 문제는 선택자 구조로 해결하고 !important 남용을 지양합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="q06">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">사용하지 않는 CSS/JS 코드가 없는가?</span>
+              <p class="check-item__desc">불필요한 코드를 제거하여 파일 크기를 줄이고 유지보수성을 높입니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="q07">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">주석이 적절히 작성되었는가?</span>
+              <p class="check-item__desc">섹션 구분, 복잡한 로직 등에 주석을 달아 협업자가 이해하기 쉽도록 합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+          <li class="check-item" data-id="q08">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">CSS 변수(Custom Properties)를 활용하는가?</span>
+              <p class="check-item__desc">색상, 여백 등 반복 사용되는 값을 CSS 변수로 관리합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--low">선택</span>
+          </li>
+          <li class="check-item" data-id="q09">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">HTML 속성 순서가 일관적인가?</span>
+              <p class="check-item__desc">id → class → data-* → src/href → alt/title → role/aria-* 순서를 권장합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--low">선택</span>
+          </li>
+          <li class="check-item" data-id="q10">
+            <div class="check-item__checkbox"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            <div class="check-item__content">
+              <span class="check-item__label">SCSS 파일이 기능별로 분리되었는가?</span>
+              <p class="check-item__desc">reset, variable, common, 페이지별 스타일로 모듈화하여 관리합니다.</p>
+            </div>
+            <span class="check-item__priority check-item__priority--medium">권장</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="js/checklist.js"></script>
+</body>
+</html>
