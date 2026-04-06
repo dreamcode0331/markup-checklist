@@ -5,63 +5,98 @@
 
 ---
 
-## HTML 문서 구조
+## HTML 구조
 
-- [ ] `<!DOCTYPE html>` 최상단 선언 확인
-- [ ] `<html lang="ko">` 언어 속성 명시
-- [ ] `<meta charset="UTF-8">` 문자 인코딩 선언
-- [ ] `<meta name="viewport" content="width=device-width, initial-scale=1">` 뷰포트 설정
-- [ ] `<title>` 태그 작성 — 페이지별 고유하고 명확한 제목
-- [ ] 헤딩 계층 구조 준수 — h1 → h2 → h3 순서, 건너뛰기 금지
-
----
-
-## 시맨틱 마크업
-
-- [ ] 시맨틱 태그 사용 — `header`, `nav`, `main`, `footer`, `article`, `section` 등
-- [ ] `div` / `span` 남용 금지 — 의미 없는 래퍼 최소화
-- [ ] 목록 태그 목적에 맞게 구분 — `ul`(비순서), `ol`(순서), `dl`(설명 목록)
-- [ ] 데이터 테이블에만 `<table>` 사용 — `<thead>`, `<tbody>`, `<caption>` 포함
-- [ ] 이동은 `<a>`, 동작은 `<button>` — 용도에 맞는 태그 사용
+- [ ] `<!DOCTYPE html>` 선언이 문서 최상단에 위치하는가
+- [ ] `<html lang="ko">` 언어 속성이 설정되었는가
+- [ ] `<meta charset="UTF-8">`이 head 내 최상단에 위치하는가
+- [ ] `<meta name="viewport" content="width=device-width, initial-scale=1.0">` 뷰포트 설정이 되었는가
+- [ ] 시맨틱 태그(`header`, `nav`, `main`, `section`, `article`, `aside`, `footer`)를 적절히 사용하였는가
+- [ ] 헤딩 태그(h1~h6)가 올바른 계층 구조인가 — h1은 페이지당 1개, 레벨 건너뛰기 금지
+- [ ] W3C Validator 검사를 통과하는가
+- [ ] 불필요한 `div`/`span` 남용이 없는가 — 의미 없는 래퍼 최소화
 
 ---
 
-## 접근성 (Accessibility)
+## 웹 접근성
 
-- [ ] 모든 `<img>`에 `alt` 속성 작성 — 장식 이미지는 `alt=""`
-- [ ] `<label>`의 `for` ↔ `<input>`의 `id` 연결 확인
-- [ ] 탭 키만으로 전체 기능 접근 가능 여부 확인
-- [ ] 색상 대비 비율 준수 — 본문 텍스트 4.5:1 이상, 대형 텍스트 3:1 이상
-- [ ] ARIA 속성 적절히 사용 — `aria-label`, `role` 등 과용 금지
-- [ ] 포커스 스타일 유지 — `outline` 제거 시 대체 스타일 반드시 제공
-
----
-
-## CSS / 스타일
-
-- [ ] 스타일시트 외부 파일로 분리 — 인라인 `style` 속성 최소화
-- [ ] 클래스 네이밍 규칙 일관성 유지 — BEM, SMACSS 등 프로젝트 규칙 통일
-- [ ] `!important` 사용 최소화 — 남용 시 유지보수 어려움
-- [ ] 반응형 브레이크포인트 확인 — 모바일, 태블릿, 데스크톱 모두 점검
-- [ ] 미사용 CSS 제거 — 불필요한 스타일 정리
+- [ ] 모든 `<img>`에 `alt` 속성이 있는가 — 장식 이미지는 `alt=""`
+- [ ] 건너뛰기 링크(Skip Navigation)가 있는가
+- [ ] 키보드만으로 모든 기능을 사용할 수 있는가 — Tab, Enter, Space, Esc
+- [ ] 포커스 표시(focus indicator)가 보이는가 — `outline` 제거 시 대체 스타일 제공
+- [ ] 폼 요소에 `<label>`이 연결되었는가 — `for`/`id` 또는 `aria-label`
+- [ ] 색상 대비(Contrast Ratio)가 충분한가 — WCAG AA 기준 4.5:1 이상
+- [ ] ARIA 속성이 올바르게 사용되었는가 — `role`, `aria-label`, `aria-hidden`, `aria-expanded` 등
+- [ ] 테이블에 `<caption>`과 `<th scope>`가 있는가
+- [ ] 링크 텍스트가 명확한가 — "여기를 클릭" 대신 목적지를 알 수 있는 텍스트
+- [ ] 새 창 링크(`target="_blank"`)에 안내가 있는가 — `title` 또는 blind 텍스트
+- [ ] 자동 재생 콘텐츠에 정지 수단이 있는가
+- [ ] WAI-ARIA 랜드마크(`banner`, `navigation`, `main`, `contentinfo`)가 적절히 사용되었는가
 
 ---
 
-## 성능 / 로딩
+## SEO
 
-- [ ] 이미지 최적화 — 적절한 포맷(WebP 권장)과 크기 사용
-- [ ] CSS/JS 로딩 순서 — CSS는 `<head>`, JS는 `<body>` 하단 또는 `defer` / `async` 적용
-- [ ] 불필요한 HTTP 요청 최소화 — 리소스 병합 및 스프라이트 검토
-- [ ] 웹폰트 최적화 — `font-display: swap`, 서브셋 적용
+- [ ] `<title>` 태그가 페이지별로 고유한가
+- [ ] `<meta name="description">`이 작성되었는가 — 150~160자 이내
+- [ ] OG(Open Graph) 태그가 설정되었는가 — `og:title`, `og:description`, `og:image`
+- [ ] `<link rel="canonical">`이 설정되었는가
+- [ ] 이미지에 의미 있는 파일명을 사용하는가
+- [ ] `robots` meta 또는 `robots.txt`가 적절한가
+- [ ] 구조화된 데이터(Schema.org)를 사용하는가 — JSON-LD 형식
+- [ ] favicon이 설정되었는가
 
 ---
 
-## 크로스 브라우저 / 디바이스 호환성
+## 성능 최적화
 
-- [ ] 주요 브라우저 확인 — Chrome, Safari, Firefox, Edge
-- [ ] 모바일 기기 확인 — iOS Safari, Android Chrome
-- [ ] 벤더 프리픽스 필요 여부 확인 — `-webkit-`, `-moz-` 등 호환성 속성
-- [ ] 레거시 IE 지원 범위 확인 — 지원 범위에 따라 폴리필 적용
+- [ ] 이미지 최적화가 되었는가 — WebP/AVIF 포맷, 적절한 크기, 압축 적용
+- [ ] 이미지에 `width`/`height` 속성이 있는가 — CLS 방지
+- [ ] 지연 로딩(`loading="lazy"`)이 적용되었는가 — 첫 화면 이미지 제외
+- [ ] CSS가 `<head>`에, JS가 `<body>` 하단에 위치하는가 — 또는 `defer`/`async` 사용
+- [ ] CSS/JS 파일이 압축(minify)되었는가
+- [ ] 웹폰트가 최적화되었는가 — `font-display: swap`, 서브셋, `preload` 적용
+- [ ] 불필요한 리소스 요청이 없는가 — 미사용 CSS/JS, 외부 라이브러리 제거
+- [ ] LCP(Largest Contentful Paint)가 2.5초 이내인가
+
+---
+
+## 크로스브라우징
+
+- [ ] Chrome 최신 버전에서 정상 동작하는가
+- [ ] Safari 최신 버전에서 정상 동작하는가 — iOS/macOS
+- [ ] Firefox 최신 버전에서 정상 동작하는가
+- [ ] Edge 최신 버전에서 정상 동작하는가
+- [ ] Samsung Internet에서 정상 동작하는가
+- [ ] 벤더 프리픽스(`-webkit-` 등)가 필요한 속성에 적용되었는가
+- [ ] CSS/JS 최신 문법의 호환성을 확인했는가 — Can I Use 확인
+
+---
+
+## 반응형 웹
+
+- [ ] 320px~1920px 범위에서 레이아웃이 깨지지 않는가
+- [ ] 가로 스크롤이 발생하지 않는가
+- [ ] 터치 영역이 충분한 크기인가 — 44×44px 이상
+- [ ] 미디어 쿼리 분기점(breakpoint)이 일관적인가
+- [ ] 폰트 크기가 반응형으로 적절히 조정되는가
+- [ ] 가로/세로 모드(orientation) 전환이 정상인가
+- [ ] 반응형 이미지(`srcset`, `<picture>`)를 사용하는가
+
+---
+
+## 코드 품질
+
+- [ ] 들여쓰기(indentation)가 일관적인가 — 2칸 또는 4칸 스페이스 통일
+- [ ] BEM 또는 일관된 클래스 네이밍을 사용하는가
+- [ ] 인라인 스타일(`style` 속성)을 사용하지 않는가
+- [ ] CSS 선택자 깊이가 3단계 이내인가
+- [ ] `!important` 사용을 최소화하였는가
+- [ ] 사용하지 않는 CSS/JS 코드가 없는가
+- [ ] 주석이 적절히 작성되었는가 — 섹션 구분, 복잡한 로직
+- [ ] CSS 변수(Custom Properties)를 활용하는가
+- [ ] HTML 속성 순서가 일관적인가 — `id` → `class` → `data-*` → `src`/`href` → `alt`/`title` → `role`/`aria-*`
+- [ ] SCSS 파일이 기능별로 분리되었는가 — reset, variable, common, 페이지별
 
 ---
 
@@ -92,12 +127,13 @@ HTML 검수 요청 시 반드시 아래 형식으로 결과를 출력한다. 임
 
 | 카테고리 | 통과 | 전체 | 비율 |
 |---------|------|------|------|
-| HTML 문서 구조 | {n} | {n} | {n}% |
-| 시맨틱 마크업 | {n} | {n} | {n}% |
-| 접근성 | {n} | {n} | {n}% |
-| CSS / 스타일 | {n} | {n} | {n}% |
-| 성능 / 로딩 | {n} | {n} | {n}% |
-| 크로스 브라우저 | {n} | {n} | {n}% |
+| HTML 구조 | {n} | {n} | {n}% |
+| 웹 접근성 | {n} | {n} | {n}% |
+| SEO | {n} | {n} | {n}% |
+| 성능 최적화 | {n} | {n} | {n}% |
+| 크로스브라우징 | {n} | {n} | {n}% |
+| 반응형 웹 | {n} | {n} | {n}% |
+| 코드 품질 | {n} | {n} | {n}% |
 | **합계** | **{n}** | **{n}** | **{n}%** |
 
 ---
