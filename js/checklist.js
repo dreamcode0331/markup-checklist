@@ -252,50 +252,126 @@ document.addEventListener('DOMContentLoaded', function () {
     var now = new Date();
     var dateStr = now.getFullYear() + '-'
       + String(now.getMonth() + 1).padStart(2, '0') + '-'
-      + String(now.getDate()).padStart(2, '0') + ' '
-      + String(now.getHours()).padStart(2, '0') + ':'
-      + String(now.getMinutes()).padStart(2, '0');
+      + String(now.getDate()).padStart(2, '0');
 
     var checked = document.querySelectorAll('.check-item__input:checked').length;
     var percent = totalItems > 0 ? Math.round((checked / totalItems) * 100) : 0;
+    var resultText = percent >= 80 ? '통과' : '미통과';
 
     var lines = [];
-    lines.push('마크업 품질 체크리스트 검수 결과');
-    lines.push('생성일: ' + dateStr);
-    lines.push('진행률: ' + checked + ' / ' + totalItems + ' (' + percent + '%)');
+    lines.push('# 마크업 검수 결과 보고서');
     lines.push('');
-    lines.push('='.repeat(50));
+    lines.push('**검수일:** ' + dateStr);
+    lines.push('**검수 기준:** 마크업 품질 체크리스트 v1.0');
+    lines.push('**최종 결과: ' + resultText + ' (' + percent + '%, ' + checked + '/' + totalItems + ')**');
+    lines.push('');
+    lines.push('---');
+
+    // Collect pass / fail items per category
+    var passItems = [];
+    var failHigh = [];
+    var failMedium = [];
+    var failLow = [];
 
     categorySections.forEach(function (section) {
       var title = section.querySelector('.category-section__title');
-      var titleText = title ? title.textContent.replace(/\s*\(.*\)/, '') : '';
+      var titleText = title ? title.textContent.replace(/\s*\(.*\)/, '').trim() : '';
       var items = section.querySelectorAll('.check-item');
-      var sectionDone = section.querySelectorAll('.check-item__input:checked').length;
-
-      lines.push('');
-      lines.push('## ' + titleText + ' (' + sectionDone + '/' + items.length + ')');
-      lines.push('-'.repeat(50));
 
       items.forEach(function (item) {
         var input = item.querySelector('.check-item__input');
         var label = item.querySelector('.check-item__label');
         var labelText = label ? (label.dataset.original || label.textContent) : '';
-        var mark = input && input.checked ? '[✓]' : '[ ]';
-        lines.push(mark + ' ' + labelText);
+        var priorityEl = item.querySelector('.check-item__priority');
+        var priority = '';
+        if (priorityEl) {
+          if (priorityEl.classList.contains('check-item__priority--high')) priority = 'high';
+          else if (priorityEl.classList.contains('check-item__priority--medium')) priority = 'medium';
+          else if (priorityEl.classList.contains('check-item__priority--low')) priority = 'low';
+        }
+
+        var entry = { text: labelText, category: titleText, priority: priority };
+
+        if (input && input.checked) {
+          passItems.push(entry);
+        } else {
+          if (priority === 'high') failHigh.push(entry);
+          else if (priority === 'medium') failMedium.push(entry);
+          else failLow.push(entry);
+        }
       });
     });
 
+    // Summary table
     lines.push('');
-    lines.push('='.repeat(50));
+    lines.push('## 카테고리별 현황');
+    lines.push('');
+    lines.push('| 카테고리 | 통과 | 전체 | 비율 |');
+    lines.push('|---------|------|------|------|');
+
+    categorySections.forEach(function (section) {
+      var title = section.querySelector('.category-section__title');
+      var titleText = title ? title.textContent.replace(/\s*\(.*\)/, '').trim() : '';
+      var items = section.querySelectorAll('.check-item');
+      var done = section.querySelectorAll('.check-item__input:checked').length;
+      var sectionPercent = items.length > 0 ? Math.round((done / items.length) * 100) : 0;
+      lines.push('| ' + titleText + ' | ' + done + ' | ' + items.length + ' | ' + sectionPercent + '% |');
+    });
+
+    lines.push('| **합계** | **' + checked + '** | **' + totalItems + '** | **' + percent + '%** |');
+    lines.push('');
+    lines.push('---');
+
+    // Pass items
+    lines.push('');
+    lines.push('## 통과 항목 (' + passItems.length + '건)');
+    lines.push('');
+    passItems.forEach(function (item) {
+      lines.push('- [x] ' + item.text);
+    });
+
+    // Fail items
+    var failTotal = failHigh.length + failMedium.length + failLow.length;
+    lines.push('');
+    lines.push('---');
+    lines.push('');
+    lines.push('## 미통과 항목 (' + failTotal + '건)');
+
+    if (failHigh.length > 0) {
+      lines.push('');
+      lines.push('### 높음 (즉시 수정)');
+      lines.push('');
+      failHigh.forEach(function (item) {
+        lines.push('- [ ] ' + item.text);
+      });
+    }
+
+    if (failMedium.length > 0) {
+      lines.push('');
+      lines.push('### 중간 (개선 권장)');
+      lines.push('');
+      failMedium.forEach(function (item) {
+        lines.push('- [ ] ' + item.text);
+      });
+    }
+
+    if (failLow.length > 0) {
+      lines.push('');
+      lines.push('### 낮음 (선택 사항)');
+      lines.push('');
+      failLow.forEach(function (item) {
+        lines.push('- [ ] ' + item.text);
+      });
+    }
 
     var text = lines.join('\n');
-    var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    var blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
     a.download = 'markup-checklist-' + now.getFullYear()
       + String(now.getMonth() + 1).padStart(2, '0')
-      + String(now.getDate()).padStart(2, '0') + '.txt';
+      + String(now.getDate()).padStart(2, '0') + '.md';
     a.click();
     URL.revokeObjectURL(url);
   });
