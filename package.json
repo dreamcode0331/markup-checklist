@@ -1,0 +1,20 @@
+{
+  "name": "markup-checklist",
+  "version": "1.0.0",
+  "description": "마크업 품질 체크리스트",
+  "scripts": {
+    "dev": "gulp",
+    "build": "gulp build",
+    "deploy": "gulp deploy"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "del": "^6.1.1",
+    "gulp": "^5.0.1",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-rename": "^2.1.0",
+    "gulp-sass": "^6.0.1",
+    "gulp-sourcemaps": "^3.0.0",
+    "sass": "^1.99.0"
+  }
+}
