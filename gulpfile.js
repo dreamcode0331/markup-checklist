@@ -1,7 +1,6 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const cleanCSS = require('gulp-clean-css');
-const rename = require('gulp-rename');
 const del = require('del');
 const browserSync = require('browser-sync').create();
 
@@ -10,7 +9,7 @@ const paths = {
   scss: {
     src: 'css/pages/*.scss',
     watch: 'css/**/*.scss',
-    dest: 'css/pages'
+    tmp: '.tmp/css/pages'
   },
   dist: {
     base: 'dist',
@@ -20,20 +19,20 @@ const paths = {
   }
 };
 
-// SCSS compile (dev)
+// SCSS compile (dev → .tmp)
 function scssCompile() {
   return gulp.src(paths.scss.src)
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest(paths.scss.dest))
+    .pipe(gulp.dest(paths.scss.tmp))
     .pipe(browserSync.stream());
 }
 
 // Clean dist
 function clean() {
-  return del([paths.dist.base]);
+  return del([paths.dist.base, '.tmp']);
 }
 
-// Build CSS (minify)
+// Build CSS (minify → dist)
 function buildCSS() {
   return gulp.src(paths.scss.src)
     .pipe(sass().on('error', sass.logError))
@@ -62,7 +61,12 @@ function copyImg() {
 // BrowserSync serve
 function serve(done) {
   browserSync.init({
-    server: { baseDir: './' },
+    server: {
+      baseDir: './',
+      routes: {
+        '/css/pages': '.tmp/css/pages'
+      }
+    },
     port: 3000,
     notify: false
   });
@@ -78,7 +82,7 @@ function watchFiles(done) {
 }
 
 // Tasks
-const build = gulp.series(clean, scssCompile, gulp.parallel(buildCSS, copyHTML, copyJS, copyImg));
+const build = gulp.series(clean, gulp.parallel(buildCSS, copyHTML, copyJS, copyImg));
 const deploy = gulp.series(build);
 const dev = gulp.series(scssCompile, serve, watchFiles);
 

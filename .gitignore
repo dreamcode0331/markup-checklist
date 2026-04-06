@@ -1,2 +1,4 @@
 node_modules/
 .sass-cache/
+.tmp/
+css/pages/*.css
