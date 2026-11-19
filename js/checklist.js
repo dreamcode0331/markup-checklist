@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
   var STORAGE_KEY = 'markup-checklist-state';
+  var AI_STORAGE_KEY = 'markup-checklist-ai';
+  var AI_STATUS = {
+    pass: null,
+    na: { text: '해당 없음', modifier: 'na' },
+    fail: { text: '수정 필요', modifier: 'fail', state: 'is-fail' },
+    check: { text: '확인 필요', modifier: 'pending', state: 'is-pending' }
+  };
 
   // DOM Elements
   var checkItems = document.querySelectorAll('.check-item');
@@ -14,9 +21,13 @@ document.addEventListener('DOMContentLoaded', function () {
   var searchInput = document.getElementById('searchInput');
   var searchCount = document.getElementById('searchCount');
   var exportBtn = document.getElementById('exportBtn');
+  var importBtn = document.getElementById('importBtn');
+  var importInput = document.getElementById('importInput');
+  var aiInfo = document.getElementById('aiInfo');
 
   var totalItems = checkInputs.length;
   totalCount.textContent = totalItems;
+  var aiResult = null;
 
   // Load saved state
   function loadState() {
@@ -255,116 +266,97 @@ document.addEventListener('DOMContentLoaded', function () {
       + String(now.getDate()).padStart(2, '0');
 
     var checked = document.querySelectorAll('.check-item__input:checked').length;
-    var percent = totalItems > 0 ? Math.round((checked / totalItems) * 100) : 0;
-    var resultText = percent >= 80 ? '통과' : '미통과';
+    var severityIcon = { high: '🔴', medium: '🟡', low: '🟢' };
 
-    var lines = [];
-    lines.push('# 마크업 검수 결과 보고서');
-    lines.push('');
-    lines.push('**검수일:** ' + dateStr);
-    lines.push('**검수 기준:** 마크업 품질 체크리스트 v1.0');
-    lines.push('**최종 결과: ' + resultText + ' (' + percent + '%, ' + checked + '/' + totalItems + ')**');
-    lines.push('');
-    lines.push('---');
-
-    // Collect pass / fail items per category
-    var passItems = [];
-    var failHigh = [];
-    var failMedium = [];
-    var failLow = [];
+    // Collect unchecked items per category: AI 'check' → 확인 필요, the rest → 수정 필요
+    var fixItems = [];
+    var pendingItems = [];
+    var categoryLines = [];
 
     categorySections.forEach(function (section) {
       var title = section.querySelector('.category-section__title');
       var titleText = title ? title.textContent.replace(/\s*\(.*\)/, '').trim() : '';
       var items = section.querySelectorAll('.check-item');
+      var fixCount = 0;
+      var pendingCount = 0;
 
       items.forEach(function (item) {
         var input = item.querySelector('.check-item__input');
+        if (input && input.checked) return;
+
+        var id = item.dataset.id;
         var label = item.querySelector('.check-item__label');
-        var labelText = label ? (label.dataset.original || label.textContent) : '';
+        var desc = item.querySelector('.check-item__desc');
         var priorityEl = item.querySelector('.check-item__priority');
-        var priority = '';
+        var priority = 'low';
         if (priorityEl) {
           if (priorityEl.classList.contains('check-item__priority--high')) priority = 'high';
           else if (priorityEl.classList.contains('check-item__priority--medium')) priority = 'medium';
-          else if (priorityEl.classList.contains('check-item__priority--low')) priority = 'low';
         }
+        var status = aiResult ? aiResult.items[id] : null;
+        var note = aiResult && aiResult.notes ? aiResult.notes[id] : '';
 
-        var entry = { text: labelText, category: titleText, priority: priority };
+        var entry = {
+          text: label ? (label.dataset.original || label.textContent) : '',
+          desc: note || (desc ? (desc.dataset.original || desc.textContent) : ''),
+          category: titleText,
+          priority: priority
+        };
 
-        if (input && input.checked) {
-          passItems.push(entry);
+        if (status === 'check') {
+          pendingItems.push(entry);
+          pendingCount++;
         } else {
-          if (priority === 'high') failHigh.push(entry);
-          else if (priority === 'medium') failMedium.push(entry);
-          else failLow.push(entry);
+          fixItems.push(entry);
+          fixCount++;
         }
       });
+
+      var counts = [];
+      if (fixCount > 0) counts.push('수정 필요 ' + fixCount);
+      if (pendingCount > 0) counts.push('확인 필요 ' + pendingCount);
+      categoryLines.push('- ' + titleText + ' : ' + (counts.length > 0 ? counts.join(' · ') : '이상 없음'));
     });
 
-    // Summary table
-    lines.push('');
-    lines.push('## 카테고리별 현황');
-    lines.push('');
-    lines.push('| 카테고리 | 통과 | 전체 | 비율 |');
-    lines.push('|---------|------|------|------|');
-
-    categorySections.forEach(function (section) {
-      var title = section.querySelector('.category-section__title');
-      var titleText = title ? title.textContent.replace(/\s*\(.*\)/, '').trim() : '';
-      var items = section.querySelectorAll('.check-item');
-      var done = section.querySelectorAll('.check-item__input:checked').length;
-      var sectionPercent = items.length > 0 ? Math.round((done / items.length) * 100) : 0;
-      lines.push('| ' + titleText + ' | ' + done + ' | ' + items.length + ' | ' + sectionPercent + '% |');
+    var order = ['high', 'medium', 'low'];
+    fixItems.sort(function (a, b) {
+      return order.indexOf(a.priority) - order.indexOf(b.priority);
     });
 
-    lines.push('| **합계** | **' + checked + '** | **' + totalItems + '** | **' + percent + '%** |');
-    lines.push('');
-    lines.push('---');
+    var resultText = fixItems.length === 0 ? '✅통과' : '❌미통과';
 
-    // Pass items
+    var lines = [];
+    lines.push('■ 마크업 검수 결과 — ' + (aiResult && aiResult.file ? aiResult.file : '체크리스트 수동 점검'));
     lines.push('');
-    lines.push('## 통과 항목 (' + passItems.length + '건)');
+    lines.push('검수일: ' + dateStr + ' · 기준: 마크업 품질 체크리스트 v2.0');
+    if (aiResult) {
+      lines.push('AI 검수: ' + (aiResult.date || '-') + ' 결과 반영');
+    }
     lines.push('');
-    passItems.forEach(function (item) {
-      lines.push('- [x] ' + item.text);
+    lines.push('[종합] 결과 ' + resultText + ' · 수정 필요 [' + fixItems.length + '] · 확인 필요 [' + pendingItems.length + '] · 확인 완료 [' + checked + '/' + totalItems + ']');
+    lines.push('');
+    lines.push('[카테고리별]');
+    categoryLines.forEach(function (line) {
+      lines.push(line);
     });
 
-    // Fail items
-    var failTotal = failHigh.length + failMedium.length + failLow.length;
-    lines.push('');
-    lines.push('---');
-    lines.push('');
-    lines.push('## 미통과 항목 (' + failTotal + '건)');
-
-    if (failHigh.length > 0) {
+    if (fixItems.length > 0) {
       lines.push('');
-      lines.push('### 높음 (즉시 수정)');
-      lines.push('');
-      failHigh.forEach(function (item) {
-        lines.push('- [ ] ' + item.text);
+      lines.push('[수정 필요]');
+      fixItems.forEach(function (item) {
+        lines.push('- ' + severityIcon[item.priority] + ' ' + item.text + ' → ' + item.desc + '  (' + item.category + ')');
       });
     }
 
-    if (failMedium.length > 0) {
+    if (pendingItems.length > 0) {
       lines.push('');
-      lines.push('### 중간 (개선 권장)');
-      lines.push('');
-      failMedium.forEach(function (item) {
-        lines.push('- [ ] ' + item.text);
+      lines.push('[확인 필요 — 런타임·빌드 단계]');
+      pendingItems.forEach(function (item) {
+        lines.push('- ' + item.text + ' → ' + item.desc + '  (' + item.category + ')');
       });
     }
 
-    if (failLow.length > 0) {
-      lines.push('');
-      lines.push('### 낮음 (선택 사항)');
-      lines.push('');
-      failLow.forEach(function (item) {
-        lines.push('- [ ] ' + item.text);
-      });
-    }
-
-    var text = lines.join('\n');
+    var text = '```\n' + lines.join('\n') + '\n```\n';
     var blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
@@ -376,6 +368,138 @@ document.addEventListener('DOMContentLoaded', function () {
     URL.revokeObjectURL(url);
   });
 
+  // AI result: badges and notes
+  function clearAiMarks() {
+    checkItems.forEach(function (item) {
+      item.classList.remove('is-fail', 'is-pending');
+      var status = item.querySelector('.check-item__status');
+      var note = item.querySelector('.check-item__note');
+      if (status) status.remove();
+      if (note) note.remove();
+    });
+  }
+
+  function renderAiMarks() {
+    clearAiMarks();
+    if (!aiResult) return;
+
+    checkItems.forEach(function (item) {
+      var id = item.dataset.id;
+      var status = AI_STATUS[aiResult.items[id]];
+      var noteText = aiResult.notes ? aiResult.notes[id] : '';
+
+      if (status) {
+        var badge = document.createElement('span');
+        badge.className = 'check-item__status check-item__status--' + status.modifier;
+        badge.textContent = status.text;
+        item.insertBefore(badge, item.querySelector('.check-item__priority'));
+        if (status.state) item.classList.add(status.state);
+      }
+
+      if (noteText) {
+        var note = document.createElement('p');
+        note.className = 'check-item__note';
+        note.textContent = noteText;
+        item.querySelector('.check-item__content').appendChild(note);
+      }
+    });
+  }
+
+  function updateAiInfo() {
+    if (!aiResult) {
+      aiInfo.textContent = '';
+      return;
+    }
+    var fail = 0;
+    var pending = 0;
+    Object.keys(aiResult.items).forEach(function (id) {
+      if (aiResult.items[id] === 'fail') fail++;
+      else if (aiResult.items[id] === 'check') pending++;
+    });
+    aiInfo.textContent = 'AI 검수 결과: ' + (aiResult.file || '-') + ' · ' + (aiResult.date || '-')
+      + ' · 수정 필요 ' + fail + ' · 확인 필요 ' + pending;
+  }
+
+  // Keep only ids that exist on this page; returns null when the format is invalid
+  function normalizeAiResult(data) {
+    if (!data || typeof data.items !== 'object' || data.items === null) return null;
+    var items = {};
+    var notes = {};
+    var ignored = 0;
+    Object.keys(data.items).forEach(function (id) {
+      var input = document.getElementById(id);
+      var isItem = input && input.classList.contains('check-item__input');
+      if (!isItem || !Object.prototype.hasOwnProperty.call(AI_STATUS, data.items[id])) {
+        ignored++;
+        return;
+      }
+      items[id] = data.items[id];
+      if (data.notes && typeof data.notes[id] === 'string') notes[id] = data.notes[id];
+    });
+    if (Object.keys(items).length === 0) return null;
+    return { file: data.file || '', date: data.date || '', items: items, notes: notes, ignored: ignored };
+  }
+
+  function applyAiResult(result) {
+    aiResult = result;
+    Object.keys(result.items).forEach(function (id) {
+      var input = document.getElementById(id);
+      var isDone = result.items[id] === 'pass' || result.items[id] === 'na';
+      input.checked = isDone;
+      input.closest('.check-item').classList.toggle('is-checked', isDone);
+    });
+    renderAiMarks();
+    updateAiInfo();
+    saveState();
+    updateProgress();
+    try {
+      localStorage.setItem(AI_STORAGE_KEY, JSON.stringify(result));
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  function loadAiResult() {
+    try {
+      var saved = localStorage.getItem(AI_STORAGE_KEY);
+      if (!saved) return;
+      aiResult = normalizeAiResult(JSON.parse(saved));
+      renderAiMarks();
+      updateAiInfo();
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  // Import AI result
+  importBtn.addEventListener('click', function () {
+    importInput.click();
+  });
+
+  importInput.addEventListener('change', function () {
+    var file = importInput.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      var result = null;
+      try {
+        result = normalizeAiResult(JSON.parse(reader.result));
+      } catch (e) {
+        result = null;
+      }
+      importInput.value = '';
+      if (!result) {
+        alert('AI 검수 결과 형식이 아닙니다. items에 항목 id와 상태값(pass/fail/na/check)이 있는 JSON 파일을 선택하세요.');
+        return;
+      }
+      applyAiResult(result);
+      if (result.ignored > 0) {
+        alert('체크리스트에 없는 id 또는 잘못된 상태값 ' + result.ignored + '건은 제외하고 반영했습니다.');
+      }
+    };
+    reader.readAsText(file);
+  });
+
   // Reset
   resetBtn.addEventListener('click', function () {
     if (!confirm('모든 체크 항목을 초기화하시겠습니까?')) return;
@@ -383,12 +507,21 @@ document.addEventListener('DOMContentLoaded', function () {
       input.checked = false;
       input.closest('.check-item').classList.remove('is-checked');
     });
+    aiResult = null;
+    clearAiMarks();
+    updateAiInfo();
+    try {
+      localStorage.removeItem(AI_STORAGE_KEY);
+    } catch (e) {
+      // ignore
+    }
     saveState();
     updateProgress();
   });
 
   // Initialize
   loadState();
+  loadAiResult();
   updateProgress();
 
   // Set initial tabindex for all sections
